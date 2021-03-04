@@ -1,35 +1,12 @@
-/*var api = {
-  "async": true,
-  "crossDomain": true,
-  "url": 'https://mashape-community-urban-dictionary.p.rapidapi.com/define?term=',
-  "type": 'GET',
-  "headers": {
-             'x-rapidapi-key': '7f68006ebcmshc12a68700e646c4p12f561jsnb67ac152360f',
-             'x-rapidapi-host': 'mashape-community-urban-dictionary.p.rapidapi.com'
-            },    
-}*/
-
 var fileData = [];
 jQuery(document).ready(function () {
   // debugger
   getJsonFileData('https://raw.githubusercontent.com/dwyl/english-words/master/words_dictionary.json');
 });
 
-jQuery("#search-box").keyup(function () {
-  jQuery("#suggesstion-box").show();
-  const searchStr = jQuery(this).val();
-  debugger;
-   fetch(
-`https://mashape-community-urban-dictionary.p.rapidapi.com/define?term=${searchStr}`,
-{
-  method: "GET",
-  headers: {
-    "x-rapidapi-host": "mashape-community-urban-dictionary.p.rapidapi.com",
-    "x-rapidapi-key": "7f68006ebcmshc12a68700e646c4p12f561jsnb67ac152360f",
-  },
-})
-.then(response => response.json()) // or .text(), or .blob(), etc
-.then(result => console.log(result));
+$("#search-box").keyup(function () {
+  $("#suggesstion-box").show();
+  const searchStr = $(this).val();
   var suggestions = fileData.filter(function (value) {
     return value.toLowerCase().indexOf(searchStr.toLowerCase()) >= 0;
   });
@@ -39,25 +16,43 @@ jQuery("#search-box").keyup(function () {
       returnData += `<li onClick="selectWord('${singleWo}')">${singleWo}</li>`
     });
   } else {
-    returnData += `<li onClick="selectWord('Iceland')">No matching results found</li>`
+    returnData += `<li onClick="selectWord('No matching results found')">No matching results found</li>`
   }
   returnData += '</ul>';
-  jQuery("#suggesstion-box").html(returnData);
-  jQuery("#search-box").css("background", "#FFF");
+  $("#suggesstion-box").html(returnData);
+  $("#search-box").css("background", "#FFF");
 });
 
 function selectWord(val) {
   alert(`Selected value is ${val}`);
   jQuery("#search-box").val(val);
   jQuery("#suggesstion-box").hide();
+  jQuery.ajax({
+    url: `https://mashape-community-urban-dictionary.p.rapidapi.com/define?term=${val}`,
+    type: 'GET',
+    headers: {
+      "x-rapidapi-host": "mashape-community-urban-dictionary.p.rapidapi.com",
+      "x-rapidapi-key": "7f68006ebcmshc12a68700e646c4p12f561jsnb67ac152360f",
+    },
+    dataType: 'json',
+    success: function (result) {
+      let returnDefinationData = '<div id="definition-list">';
+      if (result.list.length > 0) {
+        result.list.forEach(function (singleObj) {
+          returnDefinationData += `<p">${singleObj.definition}</p>`
+        });
+      } else {
+        returnDefinationData += `<p">No definition found</p>`
+      }
+      returnDefinationData += '</div>';
+      $("#definition-box").html(returnDefinationData);
+    },
+    error: function (error) {
+      alert('There is some error while fetching file from server', error);
+    }
+  });
 }
 
-  // const RAPIDAPI_API_URL = 'https://mashape-community-urban-dictionary.p.rapidapi.com/define?term=absolutely';
-  // const RAPIDAPI_REQUEST_HEADERS = {
-  //                 'x-rapidapi-key': '7f68006ebcmshc12a68700e646c4p12f561jsnb67ac152360f',
-  //                 'x-rapidapi-host': 'mashape-community-urban-dictionary.p.rapidapi.com'
-  //               }
- 
 async function getJsonFileData(fileUrl) {
   try {
 
@@ -66,6 +61,16 @@ async function getJsonFileData(fileUrl) {
       type: 'GET',
       dataType: 'json',
       success: function (result) {
+        result = {
+          "Manoj": 1,
+          "praveen": 1,
+          "aayushi": 1,
+          "Ishu": 1,
+          "Noney": 1,
+          "pradeep": 1,
+          "rahul": 1,
+          "aman": 1
+        }
         fileData = Object.keys(result);
       },
       error: function (error) {
