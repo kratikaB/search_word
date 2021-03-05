@@ -4,7 +4,7 @@ jQuery(document).ready(function () {
 /*  getJsonFileData('https://raw.githubusercontent.com/dwyl/english-words/master/words_dictionary.json');
 */});
 
-jQuery("#search-box").change(function () {
+jQuery("#search-box").keyup(function () {
   jQuery("#suggesstion-box").show();
   getJsonFileData('https://raw.githubusercontent.com/dwyl/english-words/master/words_dictionary.json');
 
