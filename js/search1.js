@@ -1,4 +1,4 @@
-var fileData = [];
+let fileData = [];
 jQuery(document).ready(function () {
   // debugger
 /*  getJsonFileData('https://raw.githubusercontent.com/dwyl/english-words/master/words_dictionary.json');
@@ -63,7 +63,7 @@ async function getJsonFileData(fileUrl) {
       type: 'GET',
       dataType: 'json',
       success: function (result) {
-      
+
         fileData = Object.keys(result);
       },
       error: function (error) {
