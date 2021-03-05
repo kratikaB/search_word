@@ -1,13 +1,15 @@
 var fileData = [];
 jQuery(document).ready(function () {
   // debugger
-  getJsonFileData('https://raw.githubusercontent.com/dwyl/english-words/master/words_dictionary.json');
-});
+/*  getJsonFileData('https://raw.githubusercontent.com/dwyl/english-words/master/words_dictionary.json');
+*/});
 
-$("#search-box").keyup(function () {
-  $("#suggesstion-box").show();
+jQuery("#search-box").change(function () {
+  jQuery("#suggesstion-box").show();
+  getJsonFileData('https://raw.githubusercontent.com/dwyl/english-words/master/words_dictionary.json');
+
   const searchStr = $(this).val();
-  var suggestions = fileData.filter(function (value) {
+  let suggestions = fileData.filter(function (value) {
     return value.toLowerCase().indexOf(searchStr.toLowerCase()) >= 0;
   });
   let returnData = '<ul id="word-list">';
@@ -19,16 +21,16 @@ $("#search-box").keyup(function () {
     returnData += `<li onClick="selectWord('No matching results found')">No matching results found</li>`
   }
   returnData += '</ul>';
-  $("#suggesstion-box").html(returnData);
-  $("#search-box").css("background", "#FFF");
+  jQuery("#suggesstion-box").html(returnData);
+  jQuery("#search-box").css("background", "#FFF");
 });
 
 function selectWord(val) {
-  alert(`Selected value is ${val}`);
+  alert(`Selected value is `+val);
   jQuery("#search-box").val(val);
   jQuery("#suggesstion-box").hide();
   jQuery.ajax({
-    url: `https://mashape-community-urban-dictionary.p.rapidapi.com/define?term=${val}`,
+    url: 'https://mashape-community-urban-dictionary.p.rapidapi.com/define?term='+val,
     type: 'GET',
     headers: {
       "x-rapidapi-host": "mashape-community-urban-dictionary.p.rapidapi.com",
@@ -45,7 +47,7 @@ function selectWord(val) {
         returnDefinationData += `<p">No definition found</p>`
       }
       returnDefinationData += '</div>';
-      $("#definition-box").html(returnDefinationData);
+      jQuery("#definition-box").html(returnDefinationData);
     },
     error: function (error) {
       alert('There is some error while fetching file from server', error);
@@ -61,16 +63,7 @@ async function getJsonFileData(fileUrl) {
       type: 'GET',
       dataType: 'json',
       success: function (result) {
-        result = {
-          "Manoj": 1,
-          "praveen": 1,
-          "aayushi": 1,
-          "Ishu": 1,
-          "Noney": 1,
-          "pradeep": 1,
-          "rahul": 1,
-          "aman": 1
-        }
+      
         fileData = Object.keys(result);
       },
       error: function (error) {
