@@ -1,4 +1,4 @@
-var fileData = [];
+let fileData = [];
 jQuery(document).ready(function () {
   getJsonFileData('https://raw.githubusercontent.com/dwyl/english-words/master/words_dictionary.json');
 });
