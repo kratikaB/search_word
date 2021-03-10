@@ -4,7 +4,6 @@ jQuery(document).ready(function () {
 });
 
 jQuery("#search-box").keyup(function () {
-  debugger;
   jQuery("#suggesstion-box").show();
   const searchStr = jQuery(this).val();
   var suggestions = fileData.filter(function (value) {
@@ -13,7 +12,7 @@ jQuery("#search-box").keyup(function () {
   let returnData = '<ul id="word-list">';
   if (suggestions.length > 0) {
     suggestions.forEach(function (singleWo) {
-      returnData += `<li onClick="selectWord('${singleWo}')">${singleWo}</li>`
+      returnData += "<li onClick=\"selectWord('"+singleWo+"')\">"+singleWo+"</li>";
     });
   } else {
     returnData += `<li onClick="selectWord('Iceland')">No matching results found</li>`
@@ -24,7 +23,7 @@ jQuery("#search-box").keyup(function () {
 });
 
 function selectWord(val) {
-  alert(`Selected value is ${val}`);
+  alert(`Selected value is` +val);
   jQuery("#search-box").val(val);
   jQuery("#suggesstion-box").hide();
 }
